@@ -28,8 +28,12 @@ async def login(username:str):
         with open('data/' + userMd5,'wb') as f:
             pickle.dump(userData,f)
     returnBody = {
-        "status":True,
-        "data":userData
+        "status": True,
+        "data":{
+            'salt': userMd5,
+            **userData
+        },
+
     }
     return returnBody
 
