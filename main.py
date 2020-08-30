@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-apiurl = 'http://127.0.0.1:4000'
+apiurl = 'https://api.startcoder.top'
 
 
 @app.get('/login')
