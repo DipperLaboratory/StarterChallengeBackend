@@ -188,4 +188,4 @@ async def gift():
 
 # 按间距中的绿色按钮以运行脚本。
 if __name__ == '__main__':
-    uvicorn.run('main:app', port=4000, debug=True)
+    uvicorn.run('main:app', port=4001, debug=True)
