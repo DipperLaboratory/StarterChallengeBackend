@@ -59,7 +59,8 @@ async def challenge1(
             'msg': '挑战一的激活链接\r\n' \
                    + apiurl + '/auth?username=' + username \
                    + '&step=1' \
-                   + '&code=' + getHash2(userObject['salt'], saltDict[1]),
+                   + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
+                   + '本邮件自动生成，请勿回复',
             'title': '挑战一',
             'receiver_name': username,
             'receiver_address': content}).start()
@@ -125,7 +126,8 @@ async def challenge4(
             'msg': '挑战四的激活链接\r\n' \
                    + apiurl + '/auth?username=' + username \
                    + '&step=4' \
-                   + '&code=' + getHash2(userObject['salt'], saltDict[4]),
+                   + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
+                   + '本邮件自动生成，请勿回复',
             'title': '挑战四',
             'receiver_name': username,
             'receiver_address': content}).start()
@@ -153,7 +155,7 @@ async def challenge5(
                     giftObject = pickle.load(f)
             except:
                 giftObject = {}
-            giftObject[userObject[username]]=userObject['salt']
+            giftObject[userObject[username]] = userObject['salt']
             with open('data/gift', 'wb') as f:
                 pickle.dump(giftObject, f)
             return {'status': True}
@@ -182,10 +184,12 @@ async def auth(
         print()
         return ['验证失败']
 
+
 @app.get('/gift')
 async def gift():
-    with open('data/gift','rb') as f:
+    with open('data/gift', 'rb') as f:
         return pickle.load(f)
+
 
 # 按间距中的绿色按钮以运行脚本。
 if __name__ == '__main__':
