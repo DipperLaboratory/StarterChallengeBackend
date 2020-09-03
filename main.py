@@ -31,6 +31,7 @@ async def login(username: str):
     except:
         userData = {
             'step': 1,
+            'user': username,
             'salt': userMd5,
         }
         with open('data/' + userMd5, 'wb') as f:
