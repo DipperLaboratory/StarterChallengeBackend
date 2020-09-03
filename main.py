@@ -57,6 +57,7 @@ async def challenge1(
     if (content.split('@')[1] == 'gmail.com'):
         threading.Thread(target=sendmail, kwargs={
             'msg': '挑战一的激活链接\r\n' \
+                   + '请访问链接以完成挑战' \
                    + apiurl + '/auth?username=' + username \
                    + '&step=1' \
                    + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
@@ -124,6 +125,7 @@ async def challenge4(
         print(userObject['salt'])
         threading.Thread(target=sendmail, kwargs={
             'msg': '挑战四的激活链接\r\n' \
+                   + '请访问链接以完成挑战' \
                    + apiurl + '/auth?username=' + username \
                    + '&step=4' \
                    + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
