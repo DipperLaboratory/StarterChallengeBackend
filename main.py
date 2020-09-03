@@ -60,7 +60,7 @@ async def challenge1(
                    + apiurl + '/auth?username=' + username \
                    + '&step=1' \
                    + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
-                   + '本邮件自动生成，请勿回复',
+                   + '\r\n本邮件自动生成，请勿回复',
             'title': '挑战一',
             'receiver_name': username,
             'receiver_address': content}).start()
@@ -127,7 +127,7 @@ async def challenge4(
                    + apiurl + '/auth?username=' + username \
                    + '&step=4' \
                    + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
-                   + '本邮件自动生成，请勿回复',
+                   + '\r\n本邮件自动生成，请勿回复',
             'title': '挑战四',
             'receiver_name': username,
             'receiver_address': content}).start()
