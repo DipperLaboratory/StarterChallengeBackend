@@ -157,7 +157,7 @@ async def challenge5(
                     giftObject = pickle.load(f)
             except:
                 giftObject = []
-            giftObject.append([userObject['username'],userObject['salt']])
+            giftObject.append([userObject['user'],userObject['salt']])
             with open('data/gift', 'wb') as f:
                 pickle.dump(giftObject, f)
             return {'status': True}
