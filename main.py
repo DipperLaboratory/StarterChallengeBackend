@@ -54,7 +54,7 @@ async def challenge1(
     # print('data/'+str(getHash(username)))
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    if (content.split('@')[1] == 'gmail.com'):
+    if (content.split('@')[1].lower() == 'gmail.com'):
         threading.Thread(target=sendmail, kwargs={
             'msg': '挑战一的激活链接\r\n' \
                    + '请访问链接以完成挑战\r\n' \
@@ -121,7 +121,7 @@ async def challenge4(
     # print('data/'+str(getHash(username)))
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    if (content.split('@')[1] == 'jgsu.edu.cn'):
+    if (content.split('@')[1].lower() == 'jgsu.edu.cn'):
         print(userObject['salt'])
         threading.Thread(target=sendmail, kwargs={
             'msg': '挑战四的激活链接\r\n' \
