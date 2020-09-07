@@ -196,15 +196,18 @@ async def auth(
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
     print(userObject['salt'])
-    if code == getHash2(userObject['salt'], saltDict[userObject['step']]) and step == userObject['step']:
-        userObject['salt'] = code
-        userObject['step'] += 1
-        with open('data/' + getHash(username), 'wb') as f:
-            pickle.dump(userObject, f)
-        return ['验证成功']
-    else:
-        print()
-        return ['验证失败']
+    try:
+        if code == getHash2(userObject['salt'], saltDict[userObject['step']]) and step == userObject['step']:
+            userObject['salt'] = code
+            userObject['step'] += 1
+            with open('data/' + getHash(username), 'wb') as f:
+                pickle.dump(userObject, f)
+            return ['验证成功']
+        else:
+            return ['验证失败']
+    except:
+        return ['验证过期']
+
 
 
 @app.get('/gift')
