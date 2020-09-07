@@ -21,7 +21,7 @@ saltDict = {
 }
 
 oneMinuteTime = timedelta(minutes=1)
-thirtySecondTime = timedelta(seconds=1)
+thirtySecondTime = timedelta(seconds=30)
 
 
 # def sendmail(msg, title, receiver_name, receiver_address):
