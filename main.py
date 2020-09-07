@@ -133,15 +133,10 @@ async def challenge4(
     # print('data/'+str(getHash(username)))
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    try:
-        lastSendEmailTime = userObject['emailTime']
-        if datetime.now() - lastSendEmailTime < thirtySecondTime:
-            return {'status': False, 'msg': '发送邮件频率过高，请30秒后重试'}
-        else:
-            userObject['emailTime'] = datetime.now()
-            with open('data/' + str(getHash(username)), 'wb') as f:
-                pickle.dump(userObject, f)
-    except:
+    lastSendEmailTime = userObject['emailTime']
+    if datetime.now() - lastSendEmailTime < thirtySecondTime:
+        return {'status': False, 'msg': '发送邮件频率过高，请30秒后重试'}
+    else:
         userObject['emailTime'] = datetime.now()
         with open('data/' + str(getHash(username)), 'wb') as f:
             pickle.dump(userObject, f)
