@@ -1,3 +1,4 @@
+import datetime
 import pickle
 import threading
 
@@ -54,7 +55,19 @@ async def challenge1(
     # print('data/'+str(getHash(username)))
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    if (content.split('@')[1].lower() == 'gmail.com'):
+    try:
+        lastSendEmailTime = userObject['emailTime']
+        if datetime.now() - lastSendEmailTime < thirtySecondTime:
+            return {'status': False, 'msg': '发送邮件频率过高，请30秒后重试'}
+        else:
+            userObject['emailTime'] = datetime.now()
+            with open('data/' + str(getHash(username)), 'rb') as f:
+                pickle.dump(userObject, f)
+    except:
+        userObject['emailTime'] = datetime.now()
+        with open('data/' + str(getHash(username)), 'rb') as f:
+            pickle.dump(userObject, f)
+    if content.split('@')[1].lower() == 'gmail.com':
         threading.Thread(target=sendmail, kwargs={
             'msg': '挑战一的激活链接\r\n' \
                    + '请访问链接以完成挑战\r\n' \
@@ -63,7 +76,6 @@ async def challenge1(
                    + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
                    + '\r\n本邮件自动生成，请勿回复',
             'title': '挑战一',
-            'receiver_name': username,
             'receiver_address': content}).start()
         return {'status': True}
     else:
@@ -80,7 +92,7 @@ async def challenge2(
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
     req = requests.get(githubAPI + str(content), params={'access_token': github_token})
-    if (req.ok):
+    if req.ok:
         c2salt = req.json()['title']
         # print(userObject['salt'])
         if c2salt == getHash2(userObject['salt'], saltDict[2]):
@@ -102,7 +114,7 @@ async def challenge3(
 ):
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    if (userObject['step'] == 3):
+    if userObject['step'] == 3:
         userObject['salt'] = getHash2(userObject['salt'], saltDict[3])
         userObject['step'] += 1
         with open('data/' + getHash(username), 'wb') as f:
@@ -121,7 +133,19 @@ async def challenge4(
     # print('data/'+str(getHash(username)))
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    if (content.split('@')[1].lower() == 'jgsu.edu.cn'):
+    try:
+        lastSendEmailTime = userObject['emailTime']
+        if datetime.now() - lastSendEmailTime < thirtySecondTime:
+            return {'status': False, 'msg': '发送邮件频率过高，请30秒后重试'}
+        else:
+            userObject['emailTime'] = datetime.now()
+            with open('data/' + str(getHash(username)), 'rb') as f:
+                pickle.dump(userObject, f)
+    except:
+        userObject['emailTime'] = datetime.now()
+        with open('data/' + str(getHash(username)), 'rb') as f:
+            pickle.dump(userObject, f)
+    if content.split('@')[1].lower() == 'jgsu.edu.cn':
         print(userObject['salt'])
         threading.Thread(target=sendmail, kwargs={
             'msg': '挑战四的激活链接\r\n' \
@@ -131,7 +155,6 @@ async def challenge4(
                    + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
                    + '\r\n本邮件自动生成，请勿回复',
             'title': '挑战四',
-            'receiver_name': username,
             'receiver_address': content}).start()
         return {'status': True}
     else:
