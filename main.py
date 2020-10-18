@@ -74,6 +74,7 @@ async def challenge1(
                    + apiurl + '/auth?username=' + username \
                    + '&step=1' \
                    + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
+                   + '\r\n如果访问显示 Internal Server Error，请将链接复制到地址栏打开' \
                    + '\r\n本邮件自动生成，请勿回复',
             'title': '挑战一',
             'receiver_address': content}).start()
@@ -148,6 +149,7 @@ async def challenge4(
                    + apiurl + '/auth?username=' + username \
                    + '&step=4' \
                    + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
+                   + '\r\n如果访问显示 Internal Server Error，请将链接复制到地址栏打开' \
                    + '\r\n本邮件自动生成，请勿回复',
             'title': '挑战四',
             'receiver_address': content}).start()
@@ -207,7 +209,6 @@ async def auth(
             return ['验证失败']
     except:
         return ['验证过期']
-
 
 
 @app.get('/gift')
