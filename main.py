@@ -1,5 +1,4 @@
 import pickle
-import threading
 
 import requests
 import uvicorn
