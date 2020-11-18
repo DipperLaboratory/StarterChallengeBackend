@@ -54,17 +54,26 @@ async def challenge1(
     # print('data/'+str(getHash(username)))
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    if (content.split('@')[1] == 'gmail.com'):
-        threading.Thread(target=sendmail, kwargs={
-            'msg': '挑战一的激活链接\r\n' \
+    if content.split('@')[1] == 'gmail.com':
+        sendmail(msg='挑战一的激活链接\r\n' \
                    + '请访问链接以完成挑战\r\n' \
                    + apiurl + '/auth?username=' + username \
                    + '&step=1' \
                    + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
                    + '\r\n本邮件自动生成，请勿回复',
-            'title': '挑战一',
-            'receiver_name': username,
-            'receiver_address': content}).start()
+                 title='挑战一',
+                 receiver_name=username,
+                 receiver_address=content)
+        # threading.Thread(target=sendmail, kwargs={
+        #     'msg': '挑战一的激活链接\r\n' \
+        #            + '请访问链接以完成挑战\r\n' \
+        #            + apiurl + '/auth?username=' + username \
+        #            + '&step=1' \
+        #            + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
+        #            + '\r\n本邮件自动生成，请勿回复',
+        #     'title': '挑战一',
+        #     'receiver_name': username,
+        #     'receiver_address': content}).start()
         return {'status': True}
     else:
         return {'status': False, 'msg': '请提交有效 Gmail 地址'}
@@ -121,18 +130,27 @@ async def challenge4(
     # print('data/'+str(getHash(username)))
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    if (content.split('@')[1] == 'jgsu.edu.cn'):
+    if content.split('@')[1] == 'jgsu.edu.cn':
         print(userObject['salt'])
-        threading.Thread(target=sendmail, kwargs={
-            'msg': '挑战四的激活链接\r\n' \
+        sendmail(msg='挑战四的激活链接\r\n' \
                    + '请访问链接以完成挑战\r\n' \
                    + apiurl + '/auth?username=' + username \
                    + '&step=4' \
                    + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
                    + '\r\n本邮件自动生成，请勿回复',
-            'title': '挑战四',
-            'receiver_name': username,
-            'receiver_address': content}).start()
+                 title='挑战四',
+                 receiver_name=username,
+                 receiver_address=content)
+        # threading.Thread(target=sendmail, kwargs={
+        #     'msg': '挑战四的激活链接\r\n' \
+        #            + '请访问链接以完成挑战\r\n' \
+        #            + apiurl + '/auth?username=' + username \
+        #            + '&step=4' \
+        #            + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
+        #            + '\r\n本邮件自动生成，请勿回复',
+        #     'title': '挑战四',
+        #     'receiver_name': username,
+        #     'receiver_address': content}).start()
         return {'status': True}
     else:
         return {'status': False, 'msg': '请提交有效本校教育邮箱地址'}
@@ -144,7 +162,7 @@ async def challenge5(
         username: str = Query(..., description='用户名'),
         content: str = Body(..., embed=True, description='发送的内容')
 ):
-    if (content == 'potplayer.daum.net'):
+    if content == 'potplayer.daum.net':
         with open('data/' + str(getHash(username)), 'rb') as f:
             userObject = pickle.load(f)
         if userObject['step'] == 5:
