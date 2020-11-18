@@ -148,20 +148,21 @@ async def challenge5(
         with open('data/' + str(getHash(username)), 'rb') as f:
             userObject = pickle.load(f)
         if userObject['step'] == 5:
-            userObject['salt'] = getHash2(userObject['salt'], saltDict[5])
+            # userObject['salt'] = getHash2(userObject['salt'], saltDict[5])
+            userObject['salt'] = 'expired'
             userObject['step'] += 1
             with open('data/' + getHash(username), 'wb') as f:
                 pickle.dump(userObject, f)
-            try:
-                with open('data/gift', 'rb') as f:
-                    giftObject = pickle.load(f)
-            except:
-                giftObject = {}
-            # print(userObject['user'])
-            # giftObject.append([userObject['user'],userObject['salt']])
-            giftObject[userObject['user']] = userObject['salt']
-            with open('data/gift', 'wb') as f:
-                pickle.dump(giftObject, f)
+            # try:
+            #     with open('data/gift', 'rb') as f:
+            #         giftObject = pickle.load(f)
+            # except:
+            #     giftObject = {}
+            # # print(userObject['user'])
+            # # giftObject.append([userObject['user'],userObject['salt']])
+            # giftObject[userObject['user']] = userObject['salt']
+            # with open('data/gift', 'wb') as f:
+            #     pickle.dump(giftObject, f)
             return {'status': True}
         else:
             return {'status': False, 'msg': '未知错误'}
