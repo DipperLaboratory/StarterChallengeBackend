@@ -3,6 +3,7 @@ import pickle
 import requests
 import uvicorn
 from fastapi import FastAPI, Query, Body
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from func import *
@@ -27,7 +28,7 @@ async def login(username: str):
     try:
         with open('data/' + userMd5, 'rb') as f:
             userData = pickle.load(f)
-    except:
+    except FileNotFoundError:
         userData = {
             'step': 1,
             'user': username,
@@ -50,29 +51,21 @@ async def challenge1(
         username: str = Query(..., description='用户名'),
         content: str = Body(..., embed=True, description='发送的内容')
 ):
-    # print('data/'+str(getHash(username)))
-    with open('data/' + str(getHash(username)), 'rb') as f:
-        userObject = pickle.load(f)
+    try:
+        with open('data/' + str(getHash(username)), 'rb') as f:
+            userObject = pickle.load(f)
+    except FileNotFoundError:
+        return {'status': False, 'msg': '用户不存在'}
     if content.split('@')[1] == 'gmail.com':
         sendmail(msg='挑战一的激活链接\r\n' \
-                   + '请访问链接以完成挑战\r\n' \
-                   + apiurl + '/auth?username=' + username \
-                   + '&step=1' \
-                   + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
-                   + '\r\n本邮件自动生成，请勿回复',
+                     + '请访问链接以完成挑战\r\n' \
+                     + apiurl + '/auth?username=' + username \
+                     + '&step=1' \
+                     + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
+                     + '\r\n本邮件自动生成，请勿回复',
                  title='挑战一',
                  receiver_name=username,
                  receiver_address=content)
-        # threading.Thread(target=sendmail, kwargs={
-        #     'msg': '挑战一的激活链接\r\n' \
-        #            + '请访问链接以完成挑战\r\n' \
-        #            + apiurl + '/auth?username=' + username \
-        #            + '&step=1' \
-        #            + '&code=' + getHash2(userObject['salt'], saltDict[1]) \
-        #            + '\r\n本邮件自动生成，请勿回复',
-        #     'title': '挑战一',
-        #     'receiver_name': username,
-        #     'receiver_address': content}).start()
         return {'status': True}
     else:
         return {'status': False, 'msg': '请提交有效 Gmail 地址'}
@@ -85,8 +78,11 @@ async def challenge2(
         content: int = Body(..., embed=True, description='发送的内容')
 ):
     githubAPI = 'https://api.github.com/repos/DipperLaboratory/clockin/issues/'
-    with open('data/' + str(getHash(username)), 'rb') as f:
-        userObject = pickle.load(f)
+    try:
+        with open('data/' + str(getHash(username)), 'rb') as f:
+            userObject = pickle.load(f)
+    except FileNotFoundError:
+        return {'status': False, 'msg': '用户不存在'}
     req = requests.get(githubAPI + str(content), params={'access_token': github_token})
     if (req.ok):
         c2salt = req.json()['title']
@@ -108,8 +104,11 @@ async def challenge3(
         *,
         username: str = Query(..., description='用户名'),
 ):
-    with open('data/' + str(getHash(username)), 'rb') as f:
-        userObject = pickle.load(f)
+    try:
+        with open('data/' + str(getHash(username)), 'rb') as f:
+            userObject = pickle.load(f)
+    except FileNotFoundError:
+        return {'status': False, 'msg': '用户不存在'}
     if userObject['step'] == 3:
         userObject['salt'] = getHash2(userObject['salt'], saltDict[3])
         userObject['step'] += 1
@@ -127,29 +126,22 @@ async def challenge4(
         content: str = Body(..., embed=True, description='发送的内容')
 ):
     # print('data/'+str(getHash(username)))
-    with open('data/' + str(getHash(username)), 'rb') as f:
-        userObject = pickle.load(f)
+    try:
+        with open('data/' + str(getHash(username)), 'rb') as f:
+            userObject = pickle.load(f)
+    except FileNotFoundError:
+        return {'status': False, 'msg': '用户不存在'}
     if content.split('@')[1] == 'jgsu.edu.cn':
         print(userObject['salt'])
         sendmail(msg='挑战四的激活链接\r\n' \
-                   + '请访问链接以完成挑战\r\n' \
-                   + apiurl + '/auth?username=' + username \
-                   + '&step=4' \
-                   + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
-                   + '\r\n本邮件自动生成，请勿回复',
+                     + '请访问链接以完成挑战\r\n' \
+                     + apiurl + '/auth?username=' + username \
+                     + '&step=4' \
+                     + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
+                     + '\r\n本邮件自动生成，请勿回复',
                  title='挑战四',
                  receiver_name=username,
                  receiver_address=content)
-        # threading.Thread(target=sendmail, kwargs={
-        #     'msg': '挑战四的激活链接\r\n' \
-        #            + '请访问链接以完成挑战\r\n' \
-        #            + apiurl + '/auth?username=' + username \
-        #            + '&step=4' \
-        #            + '&code=' + getHash2(userObject['salt'], saltDict[4]) \
-        #            + '\r\n本邮件自动生成，请勿回复',
-        #     'title': '挑战四',
-        #     'receiver_name': username,
-        #     'receiver_address': content}).start()
         return {'status': True}
     else:
         return {'status': False, 'msg': '请提交有效本校教育邮箱地址'}
@@ -162,11 +154,14 @@ async def challenge5(
         content: str = Body(..., embed=True, description='发送的内容')
 ):
     if content == 'potplayer.daum.net':
-        with open('data/' + str(getHash(username)), 'rb') as f:
-            userObject = pickle.load(f)
+        try:
+            with open('data/' + str(getHash(username)), 'rb') as f:
+                userObject = pickle.load(f)
+        except FileNotFoundError:
+            return {'status': False, 'msg': '用户不存在'}
         if userObject['step'] == 5:
-            # userObject['salt'] = getHash2(userObject['salt'], saltDict[5])
-            userObject['salt'] = 'expired'
+            userObject['salt'] = getHash2(userObject['salt'], saltDict[5])
+            # userObject['salt'] = 'expired'
             userObject['step'] += 1
             with open('data/' + getHash(username), 'wb') as f:
                 pickle.dump(userObject, f)
@@ -187,30 +182,35 @@ async def challenge5(
         return {'status': False}
 
 
-@app.get('/auth')
+@app.get('/auth', response_class=HTMLResponse)
 async def auth(
         username: str,
         code: str,
-        step: int
+        step: int,
 ):
-    with open('data/' + str(getHash(username)), 'rb') as f:
-        userObject = pickle.load(f)
+    try:
+        with open('data/' + str(getHash(username)), 'rb') as f:
+            userObject = pickle.load(f)
+    except FileNotFoundError:
+        return {'status': False, 'msg': '用户不存在'}
     print(userObject['salt'])
     if code == getHash2(userObject['salt'], saltDict[userObject['step']]) and step == userObject['step']:
         userObject['salt'] = code
         userObject['step'] += 1
         with open('data/' + getHash(username), 'wb') as f:
             pickle.dump(userObject, f)
-        return ['验证成功']
+        return '<h1>验证成功</h1>'
     else:
-        print()
-        return ['验证失败']
+        return '<h1>验证失败</h1>'
 
 
 @app.get('/gift')
 async def gift():
-    with open('data/gift', 'rb') as f:
-        return pickle.load(f)
+    try:
+        with open('data/gift', 'rb') as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        return '没人完成'
 
 
 if __name__ == '__main__':
