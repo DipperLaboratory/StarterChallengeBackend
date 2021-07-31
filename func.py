@@ -6,9 +6,8 @@ from aliyunsdkcore.request import CommonRequest
 # from email.header import Header
 # import smtplib
 
-from secret import *
+from secret import client
 
-from aliyunsdkcore.request import AcsRequest
 saltDict = {
     1: 'dU>HvK15Ss>ogXVnyb>6qg;;`HW.dJD0GVtfs2jwP3&m{JeClfy-Hw.,E1JT^--P',
     2: 'gyo1O@=K`e|+pIoah-/ (fJ@=]+7<gdoKA*NS|DvD<D&cmhH4@F{W+N/-xmL`}6/',
@@ -44,7 +43,7 @@ def sendmail(msg, title, receiver_name, receiver_address):
     request.set_action_name('SingleSendMail')
 
     request.add_query_param('RegionId', "ap-southeast-1")
-    request.add_query_param('AccountName', "noreply@mail.startcoder.top")
+    request.add_query_param('AccountName', "noreply@mail.jgsu.xyz")
     request.add_query_param('AddressType', "1")
     request.add_query_param('ReplyToAddress', "true")
     request.add_query_param('ToAddress', receiver_address)
@@ -54,6 +53,7 @@ def sendmail(msg, title, receiver_name, receiver_address):
     request.add_query_param('ClickTrace', "1")
 
     client.do_action(request)
+
 
 def getHash(x: str):
     return hashlib.md5(x.encode()).hexdigest()

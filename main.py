@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-apiurl = 'https://api.startcoder.top'
+apiurl = 'https://api.jgsu.xyz'
 
 
 @app.get('/login')
@@ -110,7 +110,7 @@ async def challenge3(
 ):
     with open('data/' + str(getHash(username)), 'rb') as f:
         userObject = pickle.load(f)
-    if (userObject['step'] == 3):
+    if userObject['step'] == 3:
         userObject['salt'] = getHash2(userObject['salt'], saltDict[3])
         userObject['step'] += 1
         with open('data/' + getHash(username), 'wb') as f:
@@ -213,6 +213,5 @@ async def gift():
         return pickle.load(f)
 
 
-# 按间距中的绿色按钮以运行脚本。
 if __name__ == '__main__':
-    uvicorn.run('main:app', port=4001, debug=False)
+    uvicorn.run('main:app', host='0.0.0.0', port=4001, debug=False)

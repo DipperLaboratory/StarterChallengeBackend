@@ -1,0 +1,4 @@
+requests~=2.26.0
+uvicorn==0.14.0
+fastapi==0.67.0
+aliyun-python-sdk-core-v3
