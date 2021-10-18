@@ -83,7 +83,7 @@ async def challenge2(
             userObject = pickle.load(f)
     except FileNotFoundError:
         return {'status': False, 'msg': '用户不存在'}
-    req = requests.get(githubAPI + str(content), params={'access_token': github_token})
+    req = requests.get(githubAPI + str(content), headers={'Authorization': f'token {github_token}'})
     if (req.ok):
         c2salt = req.json()['title']
         # print(userObject['salt'])
